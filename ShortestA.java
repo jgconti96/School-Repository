@@ -1,4 +1,3 @@
-
 package shortestatester;
 
 import java.util.LinkedList;
@@ -32,7 +31,7 @@ public class ShortestA {
     private Node goal;
     
     //Constructor of ShortestA class
-    public ShortestA(int vertices, double[][] edges, int initial, int goal)
+    public ShortestA(int vertices, double[][] edges, int[][] coordinates, int initial, int goal)
     {
         size = vertices;
         
@@ -41,11 +40,11 @@ public class ShortestA {
             for (int j = 0; j < size; j++)
                 matrix[i][j] = 0;
         
-        for (int i = 0; i < edges.length; i++)
+        for (int i = 0; i < coordinates.length; i++)
         {
-            double u = edges[i][0];
-            double v = edges[i][1];
-            matrix[u][v] = matrix[v][u];// = edges[i][2];
+            int u = coordinates[i][0];
+            int v = coordinates[i][1];
+            matrix[u][v] = edges[i][2];
         }
         
         this.initial = new Node(initial);
