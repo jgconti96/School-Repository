@@ -18,7 +18,7 @@ public class ShortestA {
         {
             this.id = id;
             gvalue = 0;
-            hvalue = heuristic(this);
+            hvalue = heuristic();
             fvalue = gvalue + hvalue;
             parent = null;
         }
@@ -27,28 +27,39 @@ public class ShortestA {
     
     private double[][] matrix;
     private int size;
-    private Node initial;
-    private Node goal;
+    private Node initialNode; // initial node to start algorithm with
+    private int initialPoint; // initial point to calculate heuristic
+    private int goalPoint; // goal node to end algorithm with
+    private Node goalNode; // goal point to calculate heuristic
+    private double[][] edges; // edges used to calculate distance and heuristic
     
     //Constructor of ShortestA class
     public ShortestA(int vertices, double[][] edges, int[][] coordinates, int initial, int goal)
     {
-        size = vertices;
+        size = vertices + 1;
+        this.edges = edges;
         
         matrix = new double[size][size];
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++)
+        for (int i = 1; i < size; i++)
+            for (int j = 1; j < size; j++)
                 matrix[i][j] = 0;
         
         for (int i = 0; i < coordinates.length; i++)
         {
             int u = coordinates[i][0];
             int v = coordinates[i][1];
-            matrix[u][v] = edges[i][2];
+            
+            matrix[u][v] =  matrix[v][u] = calculateDistance(edges, u, v);
         }
         
-        this.initial = new Node(initial);
-        this.goal = new Node(goal);
+        initialPoint = initial;
+        goalPoint = goal;
+        this.initialNode = new Node(initial);
+        this.goalNode = new Node(goal);
+    }
+    
+    private double calculateDistance(double[][] edges, int u , int v) {
+       return Math.round(Math.hypot(edges[u - 1][1] - edges[v - 1][1], edges[u - 1][2] - edges[v - 1][2]) * 100.0) / 100.0;
     }
     
     //Method finds shortest path
@@ -57,7 +68,7 @@ public class ShortestA {
         LinkedList<Node> openList = new LinkedList<>();
         LinkedList<Node> closedList = new LinkedList<>();
         
-        openList.addFirst(initial);
+        openList.addFirst(initialNode);
         
         while (!openList.isEmpty())
         {
@@ -94,7 +105,6 @@ public class ShortestA {
                             }
                         }
                     }
-
                 }
             }
         }
@@ -107,7 +117,7 @@ public class ShortestA {
     {
         LinkedList<Node> children = new LinkedList<Node>();
         
-        for (int i = 0; i < size; i++)
+        for (int i = 1; i < size; i++)
         {
             if (matrix[node.id][i] != 0)
             {
@@ -115,7 +125,7 @@ public class ShortestA {
                 
                 child.gvalue = node.gvalue + matrix[node.id][i];
                 
-                child.hvalue = heuristic(child);
+                child.hvalue = heuristic();
                 
                 child.fvalue = child.gvalue + child.hvalue;
                 
@@ -129,10 +139,9 @@ public class ShortestA {
     }
     
     //Method computes heuristic value of node
-    private double heuristic(Node node)
+    private double heuristic()
     {
-        return 0.0;
-        
+        return calculateDistance(edges, initialPoint, goalPoint);
     }
     
     //Method locates the node with minimum fvalue in a list of nodes
@@ -156,7 +165,7 @@ public class ShortestA {
     //Method decides whether a node is goal
     private boolean complete(Node node)
     {
-        return identical(node, goal);
+        return identical(node, goalNode);
     }
     
     //Method decides whether a node is in a list

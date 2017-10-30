@@ -11,7 +11,7 @@ public class ShortestATester {
                          {3.0, 1.9, 4.5}, 
                          {4.0, 1.2, 0.4}, 
                          {5.0, 3.8, 1.7}};
-        int[][] coordinates = {{1, 5}, 
+        int[][] coordinates =   {{1, 5}, 
                                  {2, 3},
                                  {1, 3}, 
                                  {2, 4},
@@ -19,7 +19,7 @@ public class ShortestATester {
                                  {1, 4}};
     
         
-        ShortestA s = new ShortestA(4, edges, coordinates, 3, 4);
+        ShortestA s = new ShortestA(5, edges, coordinates, 3, 4);
         s.solve();
         
     }
