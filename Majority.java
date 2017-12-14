@@ -16,7 +16,6 @@ public class Majority {
     private Random random ;     //random number generator
     private OpinionDrawer drawer;//drawing object
     
-    
     //Constructor of Majority class
     public Majority(int size, int iterations, double density, int seed)
     {
@@ -34,6 +33,11 @@ public class Majority {
         //initial opinions 
         initialize();
         
+        //Get inital percentage
+        int initialBlue = numberOfBlue(array);
+        
+        int count = 0;
+        
         //run iterations
         for (int n = 0; n < iterations; n++)
         {
@@ -47,10 +51,52 @@ public class Majority {
                 int i = random.nextInt(size);
                 int j = random.nextInt(size);
                 
-                //change opinion of agent to majority opinion of neighborhood
-                array[i][j] = majority(i, j);
+                
+                if (array[i][j] == 1)
+                    array[i][j] = majority(i, j);
+                else 
+                {
+                    if ((double) count / initialBlue < 0.11) {
+                        array[i][j] = majority(i, j);
+                        count++;
+                    }
+                        
+                }
+                 
+                
             }
+            displayVotingStatus(array);
         }
+    }
+    
+    //Method used to get the initial percentage of blue voters vs red
+    private int numberOfBlue(int[][] array)
+    {
+        int count = 0;
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
+            {
+                if(array[i][j] == 2)
+                    count++;
+            }
+        return count;
+    }
+    
+    //Method used to count number of reds and blues
+    private void displayVotingStatus(int[][] array)
+    {
+        int countRed = 0;
+        int countBlue = 0;
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
+            {
+                if (array[i][j] == 1)
+                    countRed++;
+                else if (array[i][j] == 2)
+                    countBlue++;
+            }
+        System.out.println("Red: " + countRed);
+        System.out.println("Blue: " + countBlue);
     }
     
     //Method initializes opinions
@@ -101,6 +147,8 @@ public class Majority {
         else
             minus += 1;
         
+
+            
         if (plus > minus)
             return PLUS;
         else if (plus < minus)
