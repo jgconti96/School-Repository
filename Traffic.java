@@ -54,21 +54,22 @@ public class Traffic {
                         array[i][j] = EMPTY;
                         array[(i + 1) % size][j] = PLUS;
                     }
+                    
                     else if (array[i][(j + 1) % size] == EMPTY)
                     {
                         array[i][j] = EMPTY;
                         array[i][(j + 1) % size] = PLUS;
+                    } 
+                    else if (j != 0)
+                    {
+                        if (array[i][(j - 1) % size] == EMPTY)
+                        {
+                            array[i][j] = EMPTY;
+                            array[i][(j - 1) % size] = PLUS;
+                        } 
                     }
-//                    else if (i != 0) {
-//                    if (array[(i - 1) % size][j] == EMPTY)
-//                    {
-//                        array[i][j] = EMPTY;
-//                        array[(i - 1) % size][(j)] = PLUS;
-//                    }
-//                    }
                     
                 }
-                
                 
                 //if right moving vehicle
                 if (array[i][j] == MINUS)
@@ -78,47 +79,27 @@ public class Traffic {
                         array[i][j] = EMPTY;
                         array[i][(j + 1) % size] = MINUS;
                     }
-                    else if (j != 0 && i != 0) {
-                    if (array[i][(j - 1) % size] == EMPTY && array[(i - 1) % size][j] != EMPTY && array[(i - 1) % size][j] != EMPTY)
+                    else if (array[(i + 1) % size][j] == EMPTY)
+                    {
+                        array[i][j] = EMPTY;
+                        array[(i + 1) % size][j] = MINUS;
+                    }
+                    else if (j != 0 ) {
+                    if (array[i][(j - 1) % size] == EMPTY)
                     {
                         array[i][j] = EMPTY;
                         array[i][(j - 1) % size] = MINUS;
                     }
                     }
-//                    else if (i != 0) {
-//                    if (array[(i - 1) % size][j] == EMPTY)
-//                    {
-//                        array[i][j] = EMPTY;
-//                        array[(i - 1) % size][j] = MINUS;
-//                    }
-//                    }
-//                    else if (array[(i + 1) % size][j] == EMPTY)
-//                    {
-//                        array[i][j] = EMPTY;
-//                        array[(i + 1) % size][j] = MINUS;
-//                    }                 
+                   
+                    
                 }
                 
             }
-            printCurrentDensity(array);
             
         }
     }
-    
-    public void printCurrentDensity(int[][] array)
-    {
-        int count = 0;
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++)
-            {
-                if (array[i][j] == EMPTY)
-                    count++;
-            }
-        int filled = (size * size) - count;
-        double temp = (double)filled/(double)(size*size);
-        System.out.println(temp);
-    }
-    
+     
     //Method initialize vehicles
     private void initialize()
     {
